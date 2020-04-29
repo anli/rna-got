@@ -1,18 +1,33 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {FlatList, View} from 'react-native';
+import {Avatar, List} from 'react-native-paper';
+import useHome from './hooks';
 
 const HomeScreenComponent = () => {
+  const {data} = useHome();
+
   return (
     <>
       <View>
-        <Text>Home Screen</Text>
+        <FlatList
+          data={data}
+          renderItem={({item}) => (
+            <List.Item
+              title={item.name}
+              left={() => (
+                <Avatar.Image size={48} source={{uri: item.imageUrl}} />
+              )}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
       </View>
     </>
   );
 };
 
-const HomeScreenOptions = {title: 'Home'};
+const HomeScreenOptions = {headerShown: false};
 
 const Stack = createStackNavigator();
 const HomeStackScreen = () => (
