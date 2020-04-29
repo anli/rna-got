@@ -1,11 +1,17 @@
+import {CharacterSelectors, characterSlice} from '@store';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+
 const useHome = () => {
-  return {data: MOCK_DATA};
+  const dispatch = useDispatch();
+  const state = useSelector(res => res);
+  const data = CharacterSelectors.characters(state);
+
+  useEffect(() => {
+    dispatch(characterSlice.actions.load());
+  }, [dispatch]);
+
+  return {data};
 };
 
 export default useHome;
-
-const MOCK_DATA = [
-  {id: '1', name: 'John', imageUrl: 'https://picsum.photos/id/1/48'},
-  {id: '2', name: 'Mary', imageUrl: 'https://picsum.photos/id/2/48'},
-  {id: '3', name: 'Jane', imageUrl: 'https://picsum.photos/id/3/48'},
-];
