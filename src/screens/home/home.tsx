@@ -11,6 +11,7 @@ const HomeScreenComponent = () => {
     <>
       <View>
         <FlatList
+          testID="HomeScreen.FlatList"
           data={data}
           renderItem={({item}) => (
             <List.Item

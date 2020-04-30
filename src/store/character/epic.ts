@@ -1,15 +1,12 @@
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {ajax} from 'rxjs/ajax';
-import {catchError, filter, map, switchMap} from 'rxjs/operators';
+import {filter, map, switchMap} from 'rxjs/operators';
 import characterSlice from './slice';
 
 const URL = 'https://www.anapioficeandfire.com/api/characters?pageSize=20';
 
-const getData$ = (page: number = 1) =>
-  ajax.getJSON(`${URL}&page=${page}`).pipe(
-    map(response => response),
-    catchError(error => of(error)),
-  );
+const getData$ = (page: number) =>
+  ajax.getJSON(`${URL}&page=${page}`).pipe(map(response => response));
 
 const loadEpic = (action$: Observable<any>) =>
   action$.pipe(
