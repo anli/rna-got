@@ -6,7 +6,7 @@ const useHome = () => {
   const dispatch = useDispatch();
   const state = useSelector<State, State>(res => res);
 
-  const data = CharacterSelectors.characters(state);
+  const data = CharacterSelectors.data(state);
   const page = CharacterSelectors.page(state);
   const isLoadingMore = CharacterSelectors.isLoadingMore(state);
   const isLoading = CharacterSelectors.isLoading(state);
