@@ -3,32 +3,50 @@ import {ajax} from 'rxjs/ajax';
 import {filter, map, switchMap} from 'rxjs/operators';
 import characterSlice from './slice';
 
-const URL = 'https://www.anapioficeandfire.com/api/characters?pageSize=20';
+const URL = 'https://www.anapioficeandfire.com/api/characters';
+const SIZE = 20;
+
+interface ApiData {
+  name: string;
+  url: string;
+}
 
 const getData$ = (page: number) =>
-  ajax.getJSON(`${URL}&page=${page}`).pipe(map(response => response));
+  ajax
+    .getJSON<ApiData[]>(`${URL}?pageSize=${SIZE}&page=${page}`)
+    .pipe(map(response => response));
 
 const loadEpic = (action$: Observable<any>) =>
   action$.pipe(
-    filter(action => action.type === characterSlice.actions.load().type),
+    filter(action => action.type === characterSlice.actions.load.type),
     switchMap(() => getData$(1)),
-    map(data => mapData(data)),
+    map(data => mapData(data, 1)),
     map(data => characterSlice.actions.loadSuccess(data)),
   );
 
-const characterEpics = [loadEpic];
+const loadMoreEpic = (action$: Observable<any>) =>
+  action$.pipe(
+    filter(action => action.type === characterSlice.actions.loadMore.type),
+    switchMap(action =>
+      getData$(action.payload).pipe(map(data => mapData(data, action.payload))),
+    ),
+    map(data => characterSlice.actions.loadMoreSuccess(data)),
+  );
 
-const getId = (url: string) => url.substring(url.lastIndexOf('/') + 1);
+const characterEpics = [loadEpic, loadMoreEpic];
 
 const IMAGE_URL = 'https://picsum.photos/';
 const getImageUrl = (id: string, size: number) =>
   `${IMAGE_URL}id/${id}/${size}`;
 
-const mapData = (data: {name: string; url: string}[]) => {
-  return data.map(({name, url}) => {
-    const id = getId(url);
+const getId = (index: number, page: number): string =>
+  String((page - 1) * SIZE + index + 1);
+
+const mapData = (data: ApiData[], page: number) => {
+  return data.map(({name}, index) => {
+    const id = getId(index, page);
     const imageUrl = getImageUrl(id, 48);
-    return {name, id, imageUrl};
+    return {name, imageUrl, id};
   });
 };
 

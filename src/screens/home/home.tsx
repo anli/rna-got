@@ -1,28 +1,31 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {FlatList, View} from 'react-native';
-import {Avatar, List} from 'react-native-paper';
+import {ActivityIndicator, Item, PlaceholderList} from './components';
 import useHome from './hooks';
 
-const HomeScreenComponent = () => {
-  const {data} = useHome();
+export const HomeScreenComponent = () => {
+  const {data, onLoadMore, isLoadingMore, isLoading} = useHome();
 
   return (
     <>
       <View>
-        <FlatList
-          testID="HomeScreen.FlatList"
-          data={data}
-          renderItem={({item}) => (
-            <List.Item
-              title={item.name}
-              left={() => (
-                <Avatar.Image size={48} source={{uri: item.imageUrl}} />
-              )}
-            />
-          )}
-          keyExtractor={item => item.id}
-        />
+        {isLoading && <PlaceholderList testID="HomeScreen.PlaceholderList" />}
+        {!isLoading && (
+          <FlatList
+            testID="HomeScreen.FlatList"
+            data={data}
+            renderItem={({item}) => (
+              <Item id={item.id} name={item.name} imageUrl={item.imageUrl} />
+            )}
+            keyExtractor={item => item.id}
+            onEndReached={onLoadMore}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={() => (
+              <ActivityIndicator color="black" animating={isLoadingMore} />
+            )}
+          />
+        )}
       </View>
     </>
   );
