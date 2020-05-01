@@ -1,11 +1,10 @@
-import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {FlatList, View} from 'react-native';
 import {ActivityIndicator, Item, PlaceholderList} from './components';
 import useHome from './hooks';
 
-export const HomeScreenComponent = () => {
-  const {data, onLoadMore, isLoadingMore, isLoading} = useHome();
+const HomeScreenComponent = () => {
+  const {data, onLoadMore, isLoadingMore, isLoading, onShowDetail} = useHome();
 
   return (
     <>
@@ -16,7 +15,12 @@ export const HomeScreenComponent = () => {
             testID="HomeScreen.FlatList"
             data={data}
             renderItem={({item}) => (
-              <Item id={item.id} name={item.name} imageUrl={item.imageUrl} />
+              <Item
+                onPress={onShowDetail}
+                id={item.id}
+                name={item.name}
+                imageUrl={item.imageUrl}
+              />
             )}
             keyExtractor={item => item.id}
             onEndReached={onLoadMore}
@@ -33,15 +37,7 @@ export const HomeScreenComponent = () => {
 
 const HomeScreenOptions = {headerShown: false};
 
-const Stack = createStackNavigator();
-const HomeStackScreen = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="HomeScreen"
-      component={HomeScreenComponent}
-      options={HomeScreenOptions}
-    />
-  </Stack.Navigator>
-);
-
-export default HomeStackScreen;
+export default class {
+  static Component = HomeScreenComponent;
+  static Options = HomeScreenOptions;
+}

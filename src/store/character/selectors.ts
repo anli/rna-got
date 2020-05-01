@@ -11,9 +11,16 @@ const isLoadingMoreSelector = (state: State) =>
 
 const isLoadingSelector = (state: State) => state.character.isLoading || false;
 
+const detailSelector = (state: State) => state.character.detail;
+
+const isLoadingDetailSelector = (state: State) =>
+  state.character.isLoadingDetail || false;
+
 export default class {
   static data = dataSelector;
   static page = pageSelector;
   static isLoadingMore = isLoadingMoreSelector;
   static isLoading = isLoadingSelector;
+  static detail = detailSelector;
+  static isLoadingDetail = isLoadingDetailSelector;
 }

@@ -4,14 +4,17 @@ import {of} from 'rxjs';
 const ajax = {
   getJSON: (url: string) => {
     switch (url) {
-      case CharacterService.getUrl(1):
+      case CharacterService.getUrlWithPage(1):
         return of(MOCK_DATA.page1);
 
-      case CharacterService.getUrl(2):
+      case CharacterService.getUrlWithPage(2):
         return of(MOCK_DATA.page2);
 
+      case CharacterService.getUrlWithId('1'):
+        return of(MOCK_DATA.page1[0]);
+
       default:
-        return of([]);
+        return of(undefined);
     }
   },
 };
@@ -23,6 +26,7 @@ const MOCK_DATA = {
     {
       url: 'https://www.anapioficeandfire.com/api/characters/11',
       name: 'John',
+      gender: 'Male',
     },
     {
       url: 'https://www.anapioficeandfire.com/api/characters/12',

@@ -5,6 +5,7 @@ interface ItemProps {
   id: string;
   name: string;
   imageUrl: string;
+  onPress: (id: string) => void;
 }
 
 class Item extends PureComponent<ItemProps> {
@@ -13,8 +14,13 @@ class Item extends PureComponent<ItemProps> {
   }
 
   render() {
+    const onPress = () => {
+      this.props.onPress(this.props.id);
+    };
+
     return (
       <List.Item
+        onPress={onPress}
         title={this.props.name}
         left={() => (
           <Avatar.Image size={48} source={{uri: this.props.imageUrl}} />

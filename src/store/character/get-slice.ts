@@ -4,6 +4,7 @@ export interface Character {
   id: string;
   name: string;
   imageUrl: string;
+  gender: 'Male' | 'Female';
 }
 
 export interface CharacterState {
@@ -11,6 +12,9 @@ export interface CharacterState {
   page: number;
   isLoadingMore?: boolean;
   isLoading?: boolean;
+  detailId?: string;
+  detail?: Character;
+  isLoadingDetail?: boolean;
 }
 
 const getCharacterSlice = (initialState = {data: [], page: 1}) =>
@@ -33,6 +37,14 @@ const getCharacterSlice = (initialState = {data: [], page: 1}) =>
       loadMoreSuccess: (state: CharacterState, action: any) => {
         state.data = [...state.data, ...action.payload];
         state.isLoadingMore = false;
+      },
+      loadDetail: (state: CharacterState, action: any) => {
+        state.isLoadingDetail = true;
+        state.detailId = action.payload;
+      },
+      loadDetailSuccess: (state: CharacterState, action: any) => {
+        state.detail = action.payload;
+        state.isLoadingDetail = false;
       },
     },
   });
