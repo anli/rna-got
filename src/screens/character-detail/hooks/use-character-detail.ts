@@ -15,6 +15,9 @@ const useCharacterDetail = () => {
 
   useEffect(() => {
     dispatch(characterSlice.actions.loadDetail(id));
+    return () => {
+      dispatch(characterSlice.actions.clearDetail());
+    };
   }, [dispatch, id]);
 
   return {data, isLoading};

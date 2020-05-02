@@ -23,7 +23,7 @@ class Item extends PureComponent<ItemProps> {
         onPress={onPress}
         title={this.props.name}
         left={() => (
-          <Avatar.Image size={48} source={{uri: this.props.imageUrl}} />
+          <Avatar.Image size={48} source={{uri: `${this.props.imageUrl}/48`}} />
         )}
       />
     );
