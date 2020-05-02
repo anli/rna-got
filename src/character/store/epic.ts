@@ -1,6 +1,6 @@
-import {CharacterService} from '@services';
 import {Observable} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
+import CharacterService from '../service';
 import characterSlice from './slice';
 
 const loadEpic = (action$: Observable<any>) =>
