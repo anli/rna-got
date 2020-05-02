@@ -1,3 +1,4 @@
+import {Screen} from '@components';
 import React from 'react';
 import {Text, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -8,7 +9,7 @@ const CharacterDetailScreenComponent = () => {
   const {data} = useCharacterDetail();
 
   return (
-    <>
+    <Screen>
       <View>
         <Image
           source={{
@@ -20,7 +21,7 @@ const CharacterDetailScreenComponent = () => {
         <Text>{data?.name}</Text>
         <Text>{data?.gender}</Text>
       </View>
-    </>
+    </Screen>
   );
 };
 

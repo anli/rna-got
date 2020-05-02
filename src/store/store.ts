@@ -1,4 +1,4 @@
-import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import {combineEpics, createEpicMiddleware} from 'redux-observable';
 import {characterEpics, characterSlice} from './character';
 
@@ -10,7 +10,7 @@ const rootEpic = (action$: any) => combineEpics(...epics)(action$).pipe();
 const getStore = () => {
   const store = configureStore({
     reducer: {character: characterSlice.reducer},
-    middleware: [...getDefaultMiddleware(), epicMiddleware],
+    middleware: [epicMiddleware],
   });
 
   epicMiddleware.run(rootEpic);
@@ -18,5 +18,7 @@ const getStore = () => {
 };
 
 const store = getStore();
+
+export type RootState = ReturnType<typeof store.getState>;
 
 export default store;

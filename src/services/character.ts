@@ -3,19 +3,20 @@ import {API_CHARACTER_URL, API_IMAGE_URL} from 'react-native-dotenv';
 import {ajax} from 'rxjs/ajax';
 import {map} from 'rxjs/operators';
 
-const SIZE = 20;
+const THUMBNAIL_SIZE = 20;
+const DETAIL_SIZE = 480;
 
 const getUrlWithPage = (page: number) =>
   queryString.stringifyUrl({
     url: API_CHARACTER_URL,
-    query: {pageSize: String(SIZE), page: String(page)},
+    query: {pageSize: String(THUMBNAIL_SIZE), page: String(page)},
   });
 
 const getImageUrl = (id: string, size: number) =>
   `${API_IMAGE_URL}id/${id}/${size}`;
 
 const getIdWithPage = (index: number, page: number): string =>
-  String((page - 1) * SIZE + index + 1);
+  String((page - 1) * THUMBNAIL_SIZE + index + 1);
 
 interface ApiData {
   name: string;
@@ -41,7 +42,7 @@ const getOne$ = (id: string) =>
     map(data => ({
       id,
       name: data.name,
-      imageUrl: getImageUrl(id, 480),
+      imageUrl: getImageUrl(id, DETAIL_SIZE),
       gender: data.gender,
     })),
   );
