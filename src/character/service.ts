@@ -47,7 +47,7 @@ const getOne$ = (id: string) =>
     })),
   );
 
-export default class CharacterProvider {
+export default class CharacterService {
   static getUrlWithPage = getUrlWithPage;
   static getAll$ = getAll$;
   static getUrlWithId = getUrlWithId;

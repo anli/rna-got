@@ -1,4 +1,4 @@
-import {CharacterService} from '@services';
+import {CharacterService} from '@character';
 import {of} from 'rxjs';
 
 const ajax = {

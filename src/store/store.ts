@@ -1,6 +1,6 @@
+import {characterEpics, characterSlice} from '@character/store';
 import {configureStore} from '@reduxjs/toolkit';
 import {combineEpics, createEpicMiddleware} from 'redux-observable';
-import {characterEpics, characterSlice} from './character';
 
 const epicMiddleware = createEpicMiddleware();
 const epics: any[] = [...characterEpics];

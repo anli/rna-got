@@ -1,5 +1,6 @@
+import {CharacterSelectors, characterSlice} from '@character/store';
 import {useRoute} from '@react-navigation/native';
-import {CharacterSelectors, characterSlice, State} from '@store';
+import {State} from '@store';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
