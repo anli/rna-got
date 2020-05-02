@@ -1,4 +1,4 @@
-import {CharacterState} from './get-slice';
+import {CharacterState} from './type';
 
 type State = {character: CharacterState};
 
