@@ -1,22 +1,15 @@
-import {NavigationContainer} from '@react-navigation/native';
 import {HomeScreen} from '@screens';
-import {store} from '@store';
-import React from 'react';
-import 'react-native';
-import {
-  cleanup,
-  fireEvent,
-  render as RNTRender,
-} from 'react-native-testing-library';
+import {render} from '@test';
+import {cleanup, fireEvent} from 'react-native-testing-library';
 import * as redux from 'react-redux';
-import {Provider as StoreProvider} from 'react-redux';
 
-const render = (children: Element) =>
-  RNTRender(
-    <StoreProvider store={store}>
-      <NavigationContainer>{children}</NavigationContainer>
-    </StoreProvider>,
-  );
+const mockNavigate = jest.fn(() => {});
+jest.mock('@react-navigation/native', () => {
+  return {
+    ...jest.requireActual('@react-navigation/native'),
+    useNavigation: jest.fn(() => ({navigate: mockNavigate})),
+  };
+});
 
 describe('Home Screen', () => {
   afterAll(() => {
@@ -34,7 +27,7 @@ describe('Home Screen', () => {
       },
     });
 
-    const component = render(<HomeScreen />);
+    const component = render(HomeScreen.Component, HomeScreen.Options);
 
     expect(component.getByTestId('HomeScreen.PlaceholderList')).toBeDefined();
 
@@ -56,7 +49,7 @@ describe('Home Screen', () => {
     const mockDispatch = jest.fn();
     spyUseDispatch.mockReturnValue(mockDispatch);
 
-    const component = render(<HomeScreen />);
+    const component = render(HomeScreen.Component, HomeScreen.Options);
 
     expect(mockDispatch).toBeCalledTimes(1);
 
@@ -69,19 +62,28 @@ describe('Home Screen', () => {
   });
 
   it('Given any, When I am at "Home Screen", Then I should see "List of Characters Names"', async () => {
-    const component = render(<HomeScreen />);
+    const component = render(HomeScreen.Component, HomeScreen.Options);
     expect(component.getByText('John')).toBeDefined();
     expect(component.getByText('Mary')).toBeDefined();
     expect(component.getByText('Jane')).toBeDefined();
   });
 
   it('Given any, When I am at "Home Screen", And I scroll to "bottom", Then I should see "Additional List of Characters Names"', async () => {
-    const component = render(<HomeScreen />);
+    const component = render(HomeScreen.Component, HomeScreen.Options);
 
     fireEvent(component.getByTestId('HomeScreen.FlatList'), 'onEndReached');
 
     expect(component.getByText('Paul')).toBeDefined();
     expect(component.getByText('Peter')).toBeDefined();
     expect(component.getByText('Micheal')).toBeDefined();
+  });
+
+  it('Given any, When I am at "Home Screen", And I press "item", Then I should see "Detail Screen"', async () => {
+    const component = render(HomeScreen.Component, HomeScreen.Options);
+
+    fireEvent(component.getByText('John'), 'press');
+
+    expect(mockNavigate).toBeCalledTimes(1);
+    expect(mockNavigate).toBeCalledWith('CharacterDetailScreen', {id: '1'});
   });
 });

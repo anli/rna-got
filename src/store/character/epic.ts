@@ -17,6 +17,13 @@ const loadMoreEpic = (action$: Observable<any>) =>
     map(data => characterSlice.actions.loadMoreSuccess(data)),
   );
 
-const characterEpics = [loadEpic, loadMoreEpic];
+const loadDetailEpic = (action$: Observable<any>) =>
+  action$.pipe(
+    filter(action => action.type === characterSlice.actions.loadDetail.type),
+    switchMap(action => CharacterService.getOne$(action.payload)),
+    map(data => characterSlice.actions.loadDetailSuccess(data)),
+  );
+
+const characterEpics = [loadEpic, loadMoreEpic, loadDetailEpic];
 
 export default characterEpics;

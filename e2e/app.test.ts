@@ -21,4 +21,12 @@ describe('App', () => {
     await element(by.id('HomeScreen.FlatList')).swipe('up', 'slow', 1);
     await expect(element(by.text('Nysterica'))).toBeVisible();
   });
+
+  it('Given any, When I am at "Home Screen", And I press "Walder", Then I should see "Walder Detail Screen"', async () => {
+    await expect(element(by.text('Walder'))).toBeVisible();
+
+    await element(by.text('Walder')).tap();
+
+    await expect(element(by.text('Male'))).toBeVisible();
+  });
 });

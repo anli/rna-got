@@ -5,7 +5,7 @@ import {map} from 'rxjs/operators';
 
 const SIZE = 20;
 
-const getUrl = (page: number) =>
+const getUrlWithPage = (page: number) =>
   queryString.stringifyUrl({
     url: API_CHARACTER_URL,
     query: {pageSize: String(SIZE), page: String(page)},
@@ -14,26 +14,41 @@ const getUrl = (page: number) =>
 const getImageUrl = (id: string, size: number) =>
   `${API_IMAGE_URL}id/${id}/${size}`;
 
-const getId = (index: number, page: number): string =>
+const getIdWithPage = (index: number, page: number): string =>
   String((page - 1) * SIZE + index + 1);
 
 interface ApiData {
   name: string;
   url: string;
+  gender: 'Male' | 'Female';
 }
 
-const mapData = (data: ApiData[], page: number) => {
-  return data.map(({name}, index) => {
-    const id = getId(index, page);
-    const imageUrl = getImageUrl(id, 48);
-    return {name, imageUrl, id};
-  });
-};
-
 const getAll$ = (page: number) =>
-  ajax.getJSON<ApiData[]>(getUrl(page)).pipe(map(data => mapData(data, page)));
+  ajax.getJSON<ApiData[]>(getUrlWithPage(page)).pipe(
+    map(data =>
+      data.map(({name}, index) => {
+        const id = getIdWithPage(index, page);
+        const imageUrl = getImageUrl(id, 48);
+        return {name, imageUrl, id};
+      }),
+    ),
+  );
+
+const getUrlWithId = (id: string) => `${API_CHARACTER_URL}/${id}`;
+
+const getOne$ = (id: string) =>
+  ajax.getJSON<ApiData>(getUrlWithId(id)).pipe(
+    map(data => ({
+      id,
+      name: data.name,
+      imageUrl: getImageUrl(id, 480),
+      gender: data.gender,
+    })),
+  );
 
 export default class CharacterProvider {
-  static getUrl = getUrl;
+  static getUrlWithPage = getUrlWithPage;
   static getAll$ = getAll$;
+  static getUrlWithId = getUrlWithId;
+  static getOne$ = getOne$;
 }
