@@ -1,5 +1,43 @@
 # React Native Game of Throne App
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/7977c4a0d7ae8b8b37b2/maintainability)](https://codeclimate.com/github/anli/rna-got/maintainability) [![Build Status](https://app.bitrise.io/app/1542344afc29b1fa/status.svg?token=KSPTvZEsaloEiwwCP5ywWg&branch=develop)](https://app.bitrise.io/app/1542344afc29b1fa)
+
+## Run the App
+
+Install packages
+
+```
+npm ci
+```
+
+Run on Android
+
+```
+npm run android
+```
+
+Run on iOS
+
+```
+npx pod-install ios
+npm run ios
+```
+
+Run e2e tests
+
+> Only for android, you must have AVD Named "Nexus_5X_API_28"
+
+```
+npm run e2e   // debug mode
+npm run ci:e2e   // release mode
+```
+
+Run unit tests
+
+```
+npm run test
+```
+
 ## Tech stack
 
 ### Redux
