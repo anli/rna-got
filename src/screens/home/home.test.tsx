@@ -11,12 +11,21 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-describe('Home Screen', () => {
+describe('Display a list of Game of Thrones characters in the list', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
   afterAll(() => {
     cleanup();
   });
 
-  it('Given any, When I am at "Home Screen", And data is "Loading", Then I should see "Placeholder List"', async () => {
+  it(`
+    Scenario: Data from API has yet to be loaded
+      Given data is "Loading"
+      When I am at "Home Screen"
+      Then I should see "Placeholder List"
+  `, async () => {
     const spy = jest.spyOn(redux, 'useSelector');
     spy.mockReturnValue({
       character: {
@@ -30,11 +39,15 @@ describe('Home Screen', () => {
     const component = render(HomeScreen.Component, HomeScreen.Options);
 
     expect(component.getByTestId('HomeScreen.PlaceholderList')).toBeDefined();
-
-    spy.mockRestore();
   });
 
-  it('Given any, When I am at "Home Screen", And data is "Loading More", And I scroll to "bottom", Then I should not "Load More"', async () => {
+  it(`
+    Scenario: User request load more data from API while loading more
+      Given data is "Loading More"
+      When I am at "Home Screen"
+      And I scroll to "bottom"
+      Then I should not "Load More"
+  `, async () => {
     const spyUseSelector = jest.spyOn(redux, 'useSelector');
     spyUseSelector.mockReturnValue({
       character: {
@@ -56,19 +69,26 @@ describe('Home Screen', () => {
     fireEvent(component.getByTestId('HomeScreen.FlatList'), 'onEndReached');
 
     expect(mockDispatch).toBeCalledTimes(1);
-
-    spyUseSelector.mockRestore();
-    spyUseDispatch.mockRestore();
   });
 
-  it('Given any, When I am at "Home Screen", Then I should see "List of Characters Names"', async () => {
+  it(`
+    Scenario: Data from API first page is loaded
+      Given data is "Loaded"
+      When I am at "Home Screen"
+      Then I should see "List of first page of characters names"
+  `, async () => {
     const component = render(HomeScreen.Component, HomeScreen.Options);
     expect(component.getByText('John')).toBeDefined();
     expect(component.getByText('Mary')).toBeDefined();
     expect(component.getByText('Jane')).toBeDefined();
   });
 
-  it('Given any, When I am at "Home Screen", And I scroll to "bottom", Then I should see "Additional List of Characters Names"', async () => {
+  it(`
+    Scenario: Data from API second page is loaded
+      Given data is "Loaded More"
+      When I am at "Home Screen"
+      Then I should see "List of second page of characters names"
+  `, async () => {
     const component = render(HomeScreen.Component, HomeScreen.Options);
 
     fireEvent(component.getByTestId('HomeScreen.FlatList'), 'onEndReached');
@@ -78,7 +98,13 @@ describe('Home Screen', () => {
     expect(component.getByText('Micheal')).toBeDefined();
   });
 
-  it('Given any, When I am at "Home Screen", And I press "item", Then I should see "Detail Screen"', async () => {
+  it(`
+    Scenario: Item is pressed
+      Given data is "Loaded"
+      When I am at "Home Screen"
+      And I press "First Item in List"
+      Then I should see "CharacterDetailScreen"
+  `, async () => {
     const component = render(HomeScreen.Component, HomeScreen.Options);
 
     fireEvent(component.getByText('John'), 'press');
