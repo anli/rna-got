@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "changelog": "standard-changelog",
     "ci:test": "npm ci && npx pod-install ios && npm run lint && npm run test",
     "cq": "codeclimate analyze",
     "ci:e2e": "detox build -c android.emu.release && detox test -c android.emu.release",
@@ -63,6 +64,7 @@
     "react-native-dotenv": "^0.2.0",
     "react-native-testing-library": "^1.13.2",
     "react-test-renderer": "16.9.0",
+    "standard-changelog": "^2.0.21",
     "typescript": "^3.7.3"
   },
   "jest": {
