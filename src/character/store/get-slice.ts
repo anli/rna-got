@@ -30,6 +30,10 @@ const getCharacterSlice = (initialState = {data: [], page: 1}) =>
         state.detail = action.payload;
         state.isLoadingDetail = false;
       },
+      clearDetail: (state: CharacterState) => {
+        state.detail = undefined;
+        state.isLoadingDetail = false;
+      },
     },
   });
 

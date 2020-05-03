@@ -4,7 +4,6 @@ import {ajax} from 'rxjs/ajax';
 import {map} from 'rxjs/operators';
 
 const THUMBNAIL_SIZE = 20;
-const DETAIL_SIZE = 480;
 
 const getUrlWithPage = (page: number) =>
   queryString.stringifyUrl({
@@ -12,8 +11,7 @@ const getUrlWithPage = (page: number) =>
     query: {pageSize: String(THUMBNAIL_SIZE), page: String(page)},
   });
 
-const getImageUrl = (id: string, size: number) =>
-  `${API_IMAGE_URL}id/${id}/${size}`;
+const getImageUrl = (id: string) => `${API_IMAGE_URL}id/${id}`;
 
 const getIdWithPage = (index: number, page: number): string =>
   String((page - 1) * THUMBNAIL_SIZE + index + 1);
@@ -22,6 +20,7 @@ interface ApiData {
   name: string;
   url: string;
   gender: 'Male' | 'Female';
+  aliases: string[];
 }
 
 const getAll$ = (page: number) =>
@@ -29,7 +28,7 @@ const getAll$ = (page: number) =>
     map(data =>
       data.map(({name}, index) => {
         const id = getIdWithPage(index, page);
-        const imageUrl = getImageUrl(id, 48);
+        const imageUrl = getImageUrl(id);
         return {name, imageUrl, id};
       }),
     ),
@@ -42,8 +41,9 @@ const getOne$ = (id: string) =>
     map(data => ({
       id,
       name: data.name,
-      imageUrl: getImageUrl(id, DETAIL_SIZE),
+      imageUrl: getImageUrl(id),
       gender: data.gender,
+      aliases: data.aliases,
     })),
   );
 
